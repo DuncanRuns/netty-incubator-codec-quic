@@ -22,7 +22,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import static io.netty.util.internal.ObjectUtil.checkInRange;
 import static io.netty.util.internal.ObjectUtil.checkPositive;
 import static io.netty.util.internal.ObjectUtil.checkPositiveOrZero;
 
@@ -350,6 +349,22 @@ public abstract class QuicCodecBuilder<B extends QuicCodecBuilder<B>> {
     public final B localConnectionIdLength(int value) {
         this.localConnIdLength = checkInRange(value, 0, Quiche.QUICHE_MAX_CONN_ID_LEN,  "value");
         return self();
+    }
+
+    public static int checkInRange(int i, int start, int end, String name) {
+        if (i >= start && i <= end) {
+            return i;
+        } else {
+            throw new IllegalArgumentException(name + ": " + i + " (expected: " + start + "-" + end + ")");
+        }
+    }
+
+    public static long checkInRange(long l, long start, long end, String name) {
+        if (l >= start && l <= end) {
+            return l;
+        } else {
+            throw new IllegalArgumentException(name + ": " + l + " (expected: " + start + "-" + end + ")");
+        }
     }
 
     /**
